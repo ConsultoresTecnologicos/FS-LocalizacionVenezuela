@@ -20,6 +20,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+require_model('impuesto.php');
 /**
  * Description of admin_venezuela
  *
@@ -60,6 +61,33 @@ class admin_venezuela extends fs_controller
             {
                $this->new_message('Datos guardados correctamente.');
             }
+         }
+         else if($_GET['opcion'] == 'iva')
+         {
+            /// eliminamos los impuestos que ya existen (los de España)
+            $imp0 = new impuesto();
+            foreach($imp0->all() as $impuesto)
+            {
+               $impuesto->delete();
+            }
+
+            /// añadimos los de Argentina
+            $codimp = array("VEN12");
+            $desc = array("Venezuela IVA 12%");
+            $recargo = 0;
+            $iva = array("12");
+            $cant = count($codimp);
+            for($i=0; $i<$cant; $i++)
+            {
+               $impuesto = new impuesto();
+               $impuesto->codimpuesto = $codimp[$i];
+               $impuesto->descripcion = $desc[$i];
+               $impuesto->recargo = $recargo;
+               $impuesto->iva = $iva[$i];
+               $impuesto->save();
+            }
+
+            $this->new_message('Se ha añadido el IVA para Venezuela.');
          }
       }
    }
