@@ -64,18 +64,20 @@ class admin_venezuela extends fs_controller
          }
          else if($_GET['opcion'] == 'iva')
          {
-            /// eliminamos los impuestos que ya existen (los de España)
+            /// eliminamos los impuestos que ya existen
+            // LJAH: Esto eliminará únicamente los impuestos que no
+            // se han usado en albaranes, presupuestos y/o facturas
             $imp0 = new impuesto();
             foreach($imp0->all() as $impuesto)
             {
                $impuesto->delete();
             }
 
-            /// añadimos los de Argentina
-            $codimp = array("VEN12");
-            $desc = array("Venezuela IVA 12%");
+            /// añadimos los impuestos de Venezuela
+            $codimp = array("VEN0","VEN12","VEN27");
+            $desc = array("Exento","IVA 12%","IVA 27%");
             $recargo = 0;
-            $iva = array("12");
+            $iva = array("0","12","27");
             $cant = count($codimp);
             for($i=0; $i<$cant; $i++)
             {
